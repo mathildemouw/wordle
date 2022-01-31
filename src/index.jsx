@@ -1,72 +1,95 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 
 class Square extends React.Component {
   render() {
     return (
       <button
       className={"square"}>
-        Square!
       </button>
     )
   }
 }
 
-class WordleBoard extends React.Component {
-  renderSquare(i) {
+class LetterOption extends React.Component {
+  render() {
+    return (
+      <button
+      className={"letter"}>
+      </button>
+    )
+  }
+}
+
+class AnswerBoard extends React.Component {
+  renderSquare() {
     return <Square />;
   }
     render() {
     return (
     <div>
       <div className="square-row">
-        {this.renderSquare(0)}
-        {this.renderSquare(1)}
-        {this.renderSquare(2)}
-        {this.renderSquare(3)}
-        {this.renderSquare(4)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
 
       <div className="square-row">
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
-        {this.renderSquare(7)}
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
 
       <div className="square-row"> 
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
-        {this.renderSquare(7)}
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
 
       <div className="square-row">
-        {this.renderSquare(0)}
-        {this.renderSquare(1)}
-        {this.renderSquare(2)}
-        {this.renderSquare(3)}
-        {this.renderSquare(4)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
 
       <div className="square-row">
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
-        {this.renderSquare(7)}
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
 
       <div className="square-row"> 
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
-        {this.renderSquare(7)}
-        {this.renderSquare(5)}
-        {this.renderSquare(6)}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
+        {this.renderSquare()}
       </div>
     </div>
+    )
+  }
+}
+
+class LetterSelection extends React.Component {
+  renderLetterOption(i) {
+    return <LetterOption letter={i}/>;
+  }
+  render(){
+    return(
+      <div>
+      {this.renderLetterOption("a")}
+      </div>
     )
   }
 }
@@ -74,7 +97,8 @@ class Game extends React.Component {
   render(){
     return (
       <div className="game">
-        <WordleBoard />
+        <div className="answers-container"><AnswerBoard /></div>
+        <div className="letters-container"><LetterSelection /></div>
       </div>
     )
   }

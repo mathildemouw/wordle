@@ -1,3 +1,16 @@
+body {
+  background: black;
+}
 .container {
   display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.square {
+  background: black;
+  border: 1px solid gray;
+  width: 100px;
+  height: 100px;
+  margin: 3px;
 }
