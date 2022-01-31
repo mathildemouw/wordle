@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Wordle clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a clone of the popular daily word game, [Wordle](https://www.powerlanguage.co.uk/wordle/). It was bootstrapped using [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
