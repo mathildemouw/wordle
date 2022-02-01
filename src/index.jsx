@@ -72,22 +72,19 @@ class AnswerBoard extends React.Component {
 
 function LetterOption (props) {
   return(
-    <div><button>{props.letter}</button>
-    </div>
+    <button className="letter-option">{props.letter}</button>
   )
 }
 
 function LetterSelection () {
-  const [letterArray, setLetterArray] = useState(["q","w","e","r","t","y","u","i","o","p",
-      "a","s","d","f","g","h","j","k","l",
-      "z","x","c","v","b","n","m"])
+  const [letterArray, setLetterArray] = useState([["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l"],
+      ["z","x","c","v","b","n","m"]])
 
-  // renderLetters(i){
-  //   const letterArray = this.state.letterArray.map(<LetterOption letter={letterArray[i]} />)
-  // }
-
-    return(<div>
-      <>{letterArray.map(i => <LetterOption letter={i} />)}</>
+    return(<div className="letter-selection-container">
+      <div className="letter-selection-row"><>{letterArray[0].map(i => <LetterOption letter={i} />)}</></div>
+      <div className="letter-selection-row"><>{letterArray[1].map(i => <LetterOption letter={i} />)}</></div>
+      <div className="letter-selection-row"><>{letterArray[2].map(i => <LetterOption letter={i} />)}</></div>
     </div>)
 }
 
@@ -95,8 +92,8 @@ class Game extends React.Component {
   render(){
     return (
       <div className="game">
-        <div className="answers-container"><AnswerBoard /></div>
-        <div className="letters-container"><LetterSelection /></div>
+        <AnswerBoard />
+        <LetterSelection />
       </div>
     )
   }

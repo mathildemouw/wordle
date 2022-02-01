@@ -3,8 +3,13 @@ body {
 }
 .container {
   display: flex;
-  flex-flow: row wrap;
   justify-content: space-around;
+}
+
+.game {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row wrap;
 }
 
 .square {
@@ -12,5 +17,21 @@ body {
   border: 1px solid gray;
   width: 100px;
   height: 100px;
+  margin: 3px;
+}
+
+.letter-selection-row {
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.letter-option {
+  background: gray;
+  color:  white;
+  border-radius: 3px;
+  border: 1px solid gray;
+  width: 50px;
+  height: 30px;
   margin: 3px;
 }
