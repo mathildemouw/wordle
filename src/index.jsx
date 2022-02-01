@@ -70,13 +70,25 @@ class AnswerBoard extends React.Component {
 }
 
 
-function LetterSelection () {
-  const [letter, setLetter] = useState("a")
-
+function LetterOption (props) {
   return(
-    <div><button>{letter}</button>
+    <div><button>{props.letter}</button>
     </div>
   )
+}
+
+function LetterSelection () {
+  const [letterArray, setLetterArray] = useState(["q","w","e","r","t","y","u","i","o","p",
+      "a","s","d","f","g","h","j","k","l",
+      "z","x","c","v","b","n","m"])
+
+  // renderLetters(i){
+  //   const letterArray = this.state.letterArray.map(<LetterOption letter={letterArray[i]} />)
+  // }
+
+    return(<div>
+      <>{letterArray.map(i => <LetterOption letter={i} />)}</>
+    </div>)
 }
 
 class Game extends React.Component {
