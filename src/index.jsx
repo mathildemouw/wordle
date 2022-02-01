@@ -1,25 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-  render() {
+function Square () {
     return (
       <button
       className={"square"}>
       </button>
     )
-  }
-}
-
-class LetterOption extends React.Component {
-  render() {
-    return (
-      <button
-      className={"letter"}>
-      </button>
-    )
-  }
 }
 
 class AnswerBoard extends React.Component {
@@ -81,18 +69,16 @@ class AnswerBoard extends React.Component {
   }
 }
 
-class LetterSelection extends React.Component {
-  renderLetterOption(i) {
-    return <LetterOption letter={i}/>;
-  }
-  render(){
-    return(
-      <div>
-      {this.renderLetterOption("a")}
-      </div>
-    )
-  }
+
+function LetterSelection () {
+  const [letter, setLetter] = useState("a")
+
+  return(
+    <div><button>{letter}</button>
+    </div>
+  )
 }
+
 class Game extends React.Component {
   render(){
     return (
