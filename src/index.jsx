@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square () {
+function Square (props) {
     return (
       <button
-      className={"square"}>
+      className={"square " + props.answerStatus}>{props.letter}
       </button>
     )
 }
 
 class AnswerBoard extends React.Component {
   renderSquare() {
-    return <Square />;
+    return <Square answerStatus={"empty"} letter={""}/>;
   }
-    render() {
+  render() {
     return (
     <div>
       <div className="square-row">
@@ -33,7 +33,7 @@ class AnswerBoard extends React.Component {
         {this.renderSquare()}
       </div>
 
-      <div className="square-row"> 
+      <div className="square-row">
         {this.renderSquare()}
         {this.renderSquare()}
         {this.renderSquare()}
@@ -69,11 +69,16 @@ class AnswerBoard extends React.Component {
   }
 }
 
-
 function LetterOption (props) {
   return(
-    <button className="letter-option">{props.letter}</button>
+    <button 
+    onClick={() => handleLetterClick(props.letter)} 
+    className="letter-option">{props.letter}</button>
   )
+}
+
+function handleLetterClick(i){
+  console.log("got here!")
 }
 
 function LetterSelection () {
@@ -82,9 +87,9 @@ function LetterSelection () {
       ["z","x","c","v","b","n","m"]])
 
     return(<div className="letter-selection-container">
-      <div className="letter-selection-row"><>{letterArray[0].map(i => <LetterOption letter={i} />)}</></div>
-      <div className="letter-selection-row"><>{letterArray[1].map(i => <LetterOption letter={i} />)}</></div>
-      <div className="letter-selection-row"><>{letterArray[2].map(i => <LetterOption letter={i} />)}</></div>
+      <div className="letter-selection-row"><>{letterArray[0].map((v, i) => <LetterOption key={i} letter={v} />)}</></div>
+      <div className="letter-selection-row"><>{letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v} />)}</></div>
+      <div className="letter-selection-row"><>{letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v} />)}</></div>
     </div>)
 }
 

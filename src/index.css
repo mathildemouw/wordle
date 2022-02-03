@@ -10,14 +10,17 @@ body {
   display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
+  width: 800px;
 }
 
 .square {
   background: black;
   border: 1px solid gray;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin: 3px;
+  color: white;
+  font-size: 48px;
 }
 
 .letter-selection-row {
@@ -31,7 +34,7 @@ body {
   color:  white;
   border-radius: 3px;
   border: 1px solid gray;
-  width: 50px;
-  height: 30px;
+  width: 70px;
+  height: 50px;
   margin: 3px;
 }
