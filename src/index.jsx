@@ -11,64 +11,28 @@ function Square (props) {
 }
 
 function AnswerBoard (props) {
-  const [answerArray, setAnswerArray] = useState([
-    [<Square answerStatus={"empty"} letter={""} key={0}/>,
-    <Square answerStatus={"empty"} letter={""} key={1}/>,
-    <Square answerStatus={"empty"} letter={""} key={2}/>,
-    <Square answerStatus={"empty"} letter={""} key={3}/>,
-    <Square answerStatus={"empty"} letter={""} key={4}/>,
-    ],[<Square answerStatus={"empty"} letter={""} key={5}/>,
-    <Square answerStatus={"empty"} letter={""} key={6}/>,
-    <Square answerStatus={"empty"} letter={""} key={7}/>,
-    <Square answerStatus={"empty"} letter={""} key={8}/>,
-    <Square answerStatus={"empty"} letter={""} key={9}/>
-    ],[<Square answerStatus={"empty"} letter={""} key={10}/>,
-    <Square answerStatus={"empty"} letter={""} key={11}/>,
-    <Square answerStatus={"empty"} letter={""} key={12}/>,
-    <Square answerStatus={"empty"} letter={""} key={13}/>,
-    <Square answerStatus={"empty"} letter={""} key={14}/>
-    ],[<Square answerStatus={"empty"} letter={""} key={15}/>,
-    <Square answerStatus={"empty"} letter={""} key={16}/>,
-    <Square answerStatus={"empty"} letter={""} key={17}/>,
-    <Square answerStatus={"empty"} letter={""} key={18}/>,
-    <Square answerStatus={"empty"} letter={""} key={19}/>
-    ],[<Square answerStatus={"empty"} letter={""} key={20}/>,
-    <Square answerStatus={"empty"} letter={""} key={21}/>,
-    <Square answerStatus={"empty"} letter={""} key={22}/>,
-    <Square answerStatus={"empty"} letter={""} key={23}/>,
-    <Square answerStatus={"empty"} letter={""} key={24}/>
-    ],[<Square answerStatus={"empty"} letter={""} key={25}/>,
-    <Square answerStatus={"empty"} letter={""} key={26}/>,
-    <Square answerStatus={"empty"} letter={""} key={27}/>,
-    <Square answerStatus={"empty"} letter={""} key={28}/>,
-    <Square answerStatus={"empty"} letter={""} key={29}/>]
-    ]);
+    let initialWords = []
+    for(let i = 0; i < 6; i++){
+      let letters = []
+      for(let j = 0; j < 5; j++){
+        letters.push({answerStatus:"empty", letter: ""})
+      }
+      initialWords.push(letters)
+    }
+
+  const [answerValues, setAnswerValues] = useState(initialWords);
 
   return (
     <div>
-      <div className="square-row">
-        {answerArray[0]}
+    { answerValues.map((word, wordIndex) => {
+        return <div className="square-row" key={wordIndex}>
+        {
+          word.map((letter, letterIndex) => {
+            return <Square answerStatus={letter.answerStatus} letter={letter.value} key={`${wordIndex}-${letterIndex}`} />
+          })
+        }
       </div>
-
-      <div className="square-row">
-        {answerArray[1]}
-      </div>
-
-      <div className="square-row">
-        {answerArray[2]}
-      </div>
-
-      <div className="square-row">
-        {answerArray[3]}
-      </div>
-
-      <div className="square-row">
-        {answerArray[4]}
-      </div>
-
-      <div className="square-row"> 
-        {answerArray[5]}
-      </div>
+    }) }
     </div>
   )
 }
