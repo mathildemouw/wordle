@@ -11,24 +11,13 @@ function Square (props) {
 }
 
 function AnswerBoard (props) {
-    let initialWords = []
-    for(let i = 0; i < 6; i++){
-      let letters = []
-      for(let j = 0; j < 5; j++){
-        letters.push({answerStatus:"empty", letter: ""})
-      }
-      initialWords.push(letters)
-    }
-
-  const [answerValues, setAnswerValues] = useState(initialWords);
-
   return (
     <div>
-    { answerValues.map((word, wordIndex) => {
+    { props.answerValues.map((word, wordIndex) => {
         return <div className="square-row" key={wordIndex}>
         {
           word.map((letter, letterIndex) => {
-            return <Square answerStatus={letter.answerStatus} letter={letter.value} key={`${wordIndex}-${letterIndex}`} />
+            return <Square answerStatus={letter.answerStatus} letter={letter.letter} key={`${wordIndex}-${letterIndex}`} />
           })
         }
       </div>
@@ -52,24 +41,48 @@ function LetterSelection (props) {
       ["z","x","c","v","b","n","m"]]
 
     return(<div className="letter-selection-container">
-      <div className="letter-selection-row"><>{letterArray[0].map((v, i) => <LetterOption key={i} letter={v} onClick={props.onClick}/>)}</></div>
-      <div className="letter-selection-row"><>{letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v} onClick={props.onClick}/>)}</></div>
-      <div className="letter-selection-row"><>{letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v} onClick={props.onClick}/>)}</></div>
+      <div className="letter-selection-row">
+        {letterArray[0].map((v, i) => <LetterOption key={i} letter={v} onClick={props.onClick}/>)}
+      </div>
+      <div className="letter-selection-row">
+        {letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v} onClick={props.onClick}/>)}
+      </div>
+      <div className="letter-selection-row">
+        {letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v} onClick={props.onClick}/>)}
+      </div>
     </div>)
 }
 
 function Game () {
-  const [selectedLetter, setSelectedLetter] = useState ("")
+  let initialWords = []
+  for(let i = 0; i < 6; i++){
+    let letters = []
+    for(let j = 0; j < 5; j++){
+      letters.push({answerStatus:"guessready", letter: ""})
+    }
+    initialWords.push(letters)
+  }
+
+  const [answerValues, setAnswerValues] = useState(initialWords);
+  const [selectedLetter, setSelectedLetter] = useState ("");
   const [currentGuess, setCurrentGuess] = useState(0);
 
   function handleLetterClick(i){
-    console.log(i)
-    setSelectedLetter(i)
+    setSelectedLetter(i);
+    let newAnswerValues = answerValues
+    let wordIndex = Math.floor(currentGuess / 5)
+    let letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
+    newAnswerValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
+    setAnswerValues(newAnswerValues)
     setCurrentGuess(currentGuess + 1)
   }
+
   return (
     <div className="game">
-      <AnswerBoard selectedLetter={selectedLetter} currentGuess={currentGuess}/>
+      <AnswerBoard
+      selectedLetter={selectedLetter}
+      currentGuess={currentGuess}
+      answerValues={answerValues} />
       <LetterSelection onClick={handleLetterClick}/>
     </div>
   )
