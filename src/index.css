@@ -1,6 +1,7 @@
 body {
   background: black;
 }
+
 .container {
   display: flex;
   justify-content: space-around;
@@ -37,4 +38,17 @@ body {
   width: 50px;
   height: 60px;
   margin: 3px;
+}
+
+.few-letters {
+  background: lightgrey;
+  border-radius: 5px;
+  color: black;
+  height: 40px;
+  position: absolute;
+  visibility: hidden;
+}
+
+.show-warning {
+  visibility: visible;
 }

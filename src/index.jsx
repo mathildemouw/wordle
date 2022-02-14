@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './wordlist.jsx';
 
 function Square (props) {
     return (
@@ -26,7 +27,6 @@ function AnswerBoard (props) {
   )
 }
 
-
 function LetterOption (props) {
   return(
     <button 
@@ -35,10 +35,18 @@ function LetterOption (props) {
   )
 }
 
+function FewLettersWarning (props) {
+  let showWarning = "";
+  if(props.warnFewLetters === true){
+    showWarning = "show-warning"
+  }
+  return(<p className={"few-letters" + " " + showWarning }>Not enough letters</p>)
+}
+
 function LetterSelection (props) {
   const letterArray = [["q","w","e","r","t","y","u","i","o","p"],
       ["a","s","d","f","g","h","j","k","l"],
-      ["z","x","c","v","b","n","m"]]
+      ["enter","z","x","c","v","b","n","m"]]
 
     return(<div className="letter-selection-container">
       <div className="letter-selection-row">
@@ -66,19 +74,43 @@ function Game () {
   const [answerValues, setAnswerValues] = useState(initialWords);
   const [selectedLetter, setSelectedLetter] = useState ("");
   const [currentGuess, setCurrentGuess] = useState(0);
+  const guessesUsed = 0;
+  const [warnFewLetters, setwarnFewLetters] = useState(false);
 
   function handleLetterClick(i){
-    setSelectedLetter(i);
-    let newAnswerValues = answerValues
     let wordIndex = Math.floor(currentGuess / 5)
     let letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
+    //TODO: don't move on to the next word until you test the guess of the current word
+    //TODO: allow deleting a letter
+    //TODO: hit "enter" to guess
+    if(i==="enter"){
+      //check if there are enough letters to form a word
+      if((letterIndex+1)/5 === Math.floor((letterIndex+1)/5)){
+        setwarnFewLetters(true);
+      } else {
+            console.log("you're trying to guess!")
+            console.log(letterIndex)
+      }
+      //check if the words are a word
+      //if so
+      //show if the guessed letters are in the word
+      //show if the guessed letter are in the word and in the right location
+      //increment the guessesUsed
+    } else{
+    //TODO: can't type more than 5 letters at a time
+    //TODO: play using the keyboard
+    //fill in letter
+    setSelectedLetter(i);
+    let newAnswerValues = answerValues
     newAnswerValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
     setAnswerValues(newAnswerValues)
     setCurrentGuess(currentGuess + 1)
+   }
   }
 
   return (
     <div className="game">
+      <FewLettersWarning warnFewLetters={warnFewLetters} />
       <AnswerBoard
       selectedLetter={selectedLetter}
       currentGuess={currentGuess}
