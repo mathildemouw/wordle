@@ -46,9 +46,4 @@ body {
   color: black;
   height: 40px;
   position: absolute;
-  visibility: hidden;
-}
-
-.show-warning {
-  visibility: visible;
 }

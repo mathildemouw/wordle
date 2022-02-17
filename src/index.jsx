@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './wordlist.jsx';
@@ -36,11 +36,11 @@ function LetterOption (props) {
 }
 
 function FewLettersWarning (props) {
-  let showWarning = "";
-  if(props.warnFewLetters === true){
-    showWarning = "show-warning"
+  if (!props.warnFewLetters) {
+    return null;
   }
-  return(<p className={"few-letters" + " " + showWarning }>Not enough letters</p>)
+
+  return(<p className={"few-letters"}>Not enough letters</p>)
 }
 
 function LetterSelection (props) {
@@ -74,18 +74,32 @@ function Game () {
   const [answerValues, setAnswerValues] = useState(initialWords);
   const [selectedLetter, setSelectedLetter] = useState ("");
   const [currentGuess, setCurrentGuess] = useState(0);
-  const guessesUsed = 0;
+  // const guessesUsed = 0;
   const [warnFewLetters, setwarnFewLetters] = useState(false);
+
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      // After 3 seconds set the show value to false
+      setwarnFewLetters(false)
+    }, 3000)
+
+    return () => {
+      clearTimeout(timeId)
+    }
+  }, [warnFewLetters]);
+
 
   function handleLetterClick(i){
     let wordIndex = Math.floor(currentGuess / 5)
     let letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
     //TODO: don't move on to the next word until you test the guess of the current word
     //TODO: allow deleting a letter
-    //TODO: hit "enter" to guess
+
     if(i==="enter"){
       //check if there are enough letters to form a word
-      if((letterIndex+1)/5 === Math.floor((letterIndex+1)/5)){
+      if((letterIndex+1)/5 !== Math.floor((letterIndex+1)/5)){
+        console.log("not enough letters!")
         setwarnFewLetters(true);
       } else {
             console.log("you're trying to guess!")
