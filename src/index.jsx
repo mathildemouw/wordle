@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import './wordlist.jsx';
+import wordlist from './wordlist.jsx';
 
 function Square (props) {
     return (
@@ -14,7 +14,7 @@ function Square (props) {
 function AnswerBoard (props) {
   return (
     <div>
-    { props.answerValues.map((word, wordIndex) => {
+    { props.filledInValues.map((word, wordIndex) => {
         return <div className="square-row" key={wordIndex}>
         {
           word.map((letter, letterIndex) => {
@@ -71,11 +71,12 @@ function Game () {
     initialWords.push(letters)
   }
 
-  const [answerValues, setAnswerValues] = useState(initialWords);
+  const [filledInValues, setfilledInValues] = useState(initialWords);
   const [selectedLetter, setSelectedLetter] = useState ("");
   const [currentGuess, setCurrentGuess] = useState(0);
   // const guessesUsed = 0;
   const [warnFewLetters, setwarnFewLetters] = useState(false);
+  const theAnswer = "donut";
 
 
   useEffect(() => {
@@ -91,34 +92,49 @@ function Game () {
 
 
   function handleLetterClick(i){
+    console.log("current guess")
+    console.log(currentGuess)
     let wordIndex = Math.floor(currentGuess / 5)
     let letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
+    console.log("letterIndex")
+    console.log(letterIndex)
+    console.log("wordIndex")
+    console.log(wordIndex)
     //TODO: don't move on to the next word until you test the guess of the current word
     //TODO: allow deleting a letter
-
     if(i==="enter"){
       //check if there are enough letters to form a word
-      if((letterIndex+1)/5 !== Math.floor((letterIndex+1)/5)){
-        console.log("not enough letters!")
+      if(((letterIndex)/5) !== Math.floor((letterIndex)/5)){
         setwarnFewLetters(true);
       } else {
-            console.log("you're trying to guess!")
-            console.log(letterIndex)
+          let wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
+          let wordguessArray=[filledInValues[wordIndex - 1][letterIndex].letter,filledInValues[wordIndex - 1][letterIndex+1].letter,filledInValues[wordIndex - 1][letterIndex+2].letter,filledInValues[wordIndex - 1][letterIndex+3].letter,filledInValues[wordIndex - 1][letterIndex+4].letter]
+          let answerArray =[]
+          //check if the word is the word
+          if(wordguess === theAnswer){
+            console.log("you guessed it!")
+          } else{
+            //check if the word is in the list
+            if(wordlist.includes(wordguess)){
+              console.log("word is in the list!")
+              //identify letters that are correctLetterAndPlace or correctLetter
+            } else{console.log("word is not in the list!")}
+          }
       }
-      //check if the words are a word
-      //if so
-      //show if the guessed letters are in the word
-      //show if the guessed letter are in the word and in the right location
-      //increment the guessesUsed
     } else{
-    //TODO: can't type more than 5 letters at a time
+      if((currentGuess !== 0) && (currentGuess/5) === Math.floor((currentGuess/5))){
+        console.log("can't move on without pressing enter or deleting")
+      } else {
+        //TODO: can't type more than 5 letters at a time
+        //fill in letter
+        setSelectedLetter(i);
+        let newFilledInValues = filledInValues
+        newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
+        setfilledInValues(newFilledInValues);
+        setCurrentGuess(currentGuess + 1)
+      }
     //TODO: play using the keyboard
-    //fill in letter
-    setSelectedLetter(i);
-    let newAnswerValues = answerValues
-    newAnswerValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
-    setAnswerValues(newAnswerValues)
-    setCurrentGuess(currentGuess + 1)
+    //TODO: style used letters in keyboard
    }
   }
 
@@ -128,8 +144,11 @@ function Game () {
       <AnswerBoard
       selectedLetter={selectedLetter}
       currentGuess={currentGuess}
-      answerValues={answerValues} />
-      <LetterSelection onClick={handleLetterClick}/>
+      filledInValues={filledInValues} />
+      <LetterSelection
+      onClick={handleLetterClick}
+      // filledInValues={filledInValues}
+      />
     </div>
   )
 }
