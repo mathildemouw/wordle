@@ -31,7 +31,7 @@ function LetterOption (props) {
   return(
     <button 
     onClick={() => props.onClick(props.letter)} 
-    className="letter-option">{props.letter}</button>
+    className={"letter-option " + props.guessedStatus}>{props.letter}</button>
   )
 }
 
@@ -44,19 +44,15 @@ function FewLettersWarning (props) {
 }
 
 function LetterSelection (props) {
-  const letterArray = [["q","w","e","r","t","y","u","i","o","p"],
-      ["a","s","d","f","g","h","j","k","l"],
-      ["enter","z","x","c","v","b","n","m"]]
-
     return(<div className="letter-selection-container">
       <div className="letter-selection-row">
-        {letterArray[0].map((v, i) => <LetterOption key={i} letter={v} onClick={props.onClick}/>)}
+        {props.letterArray[0].map((v, i) => <LetterOption key={i} letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
       </div>
       <div className="letter-selection-row">
-        {letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v} onClick={props.onClick}/>)}
+        {props.letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
       </div>
       <div className="letter-selection-row">
-        {letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v} onClick={props.onClick}/>)}
+        {props.letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
       </div>
     </div>)
 }
@@ -73,10 +69,21 @@ function Game () {
 
   const [filledInValues, setfilledInValues] = useState(initialWords);
   const [selectedLetter, setSelectedLetter] = useState ("");
-  const [currentGuess, setCurrentGuess] = useState(0);
+  const [currentGuess, setCurrentGuess]     = useState(0);
   // const guessesUsed = 0;
   const [warnFewLetters, setwarnFewLetters] = useState(false);
   const theAnswer = "donut";
+
+  const letterArray = [["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l"],
+      ["enter","z","x","c","v","b","n","m", "delete"]]
+
+  const [letterSelectionArray, setLetterSelectionArray] = useState([
+    [{letter: "q", guessedStatus: ""},{letter: "w", guessedStatus: ""},{letter: "e", guessedStatus: ""},{letter: "r", guessedStatus: ""},{letter: "t", guessedStatus: ""},{letter: "y", guessedStatus: ""},{letter: "u", guessedStatus: ""},{letter: "i", guessedStatus: ""},{letter: "o", guessedStatus: ""},{letter: "p", guessedStatus: ""}],
+    [{letter: "a", guessedStatus: ""},{letter: "s", guessedStatus: ""},{letter: "d", guessedStatus: ""},{letter: "f", guessedStatus: ""},{letter: "g", guessedStatus: ""},{letter: "h", guessedStatus: ""},{letter: "j", guessedStatus: ""},{letter: "k", guessedStatus: ""},{letter: "l", guessedStatus: ""}],
+    [{letter: "enter", guessedStatus: ""},{letter: "z", guessedStatus: ""},{letter: "x", guessedStatus: ""},{letter: "c", guessedStatus: ""},{letter: "v", guessedStatus: ""},{letter: "b", guessedStatus: ""},{letter: "n", guessedStatus: ""},{letter: "m", guessedStatus: ""}, {letter: "delete", guessedStatus: ""}]])
+  const [correctLetters, setCorrectLetters] = useState([])
+  const [correctLettersCorrectPlace, setCorrectLettersCorrectPlace] = useState([])
 
 
   useEffect(() => {
@@ -92,24 +99,20 @@ function Game () {
 
 
   function handleLetterClick(i){
-    console.log("current guess")
-    console.log(currentGuess)
-    let wordIndex = Math.floor(currentGuess / 5)
-    let letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
-    console.log("letterIndex")
-    console.log(letterIndex)
-    console.log("wordIndex")
-    console.log(wordIndex)
+    const wordIndex = Math.floor(currentGuess / 5)
+    const letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
+    let letterSelection = letterSelectionArray
+
     //TODO: don't move on to the next word until you test the guess of the current word
     //TODO: allow deleting a letter
-    if(i==="enter"){
+    if(i === "enter"){
       //check if there are enough letters to form a word
       if(((letterIndex)/5) !== Math.floor((letterIndex)/5)){
         setwarnFewLetters(true);
       } else {
-          let wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
-          let wordguessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
-          let theAnswerArray = theAnswer.split("")
+          const wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
+          const wordGuessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
+          const theAnswerArray = theAnswer.split("")
           //check if the word is the word
           if(wordguess === theAnswer){
             console.log("you guessed it!")
@@ -117,11 +120,30 @@ function Game () {
             //check if the word is in the list
             if(wordlist.includes(wordguess)){
               //identify letters that are correctLetterAndPlace or correctLetter
-              wordguessArray.map((letterObject, i) => {
+              wordGuessArray.map((letterObject, letterObjectIndex) => {
                 if(theAnswerArray.includes(letterObject.letter)){
                   letterObject.answerStatus = "correctLetter"
-                  if(theAnswerArray[i] == letterObject.letter){
+                  if(!correctLetters.includes(letterObject.letter)){
+                    setCorrectLetters(correctLetters.concat(letterObject.letter))
+                    console.log("about to change letter selection")
+
+                    //TODO: pull out into its own function
+                    for(let i=0; i < letterSelection.length; i++){
+                      for(let j=0; j < letterSelection[i].length; j++){
+                        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = "correctLetter"}
+                      }
+                    }
+                  }
+                  if(theAnswerArray[letterObjectIndex] == letterObject.letter){
                     letterObject.answerStatus = "correctLetterAndPlace"
+                    if(!correctLettersCorrectPlace.includes(letterObject.letter)){setCorrectLettersCorrectPlace(correctLettersCorrectPlace.concat(letterObject.letter))}
+
+                    //TODO: pull out into its own function
+                    for(let i=0; i < letterSelection.length; i++){
+                      for(let j=0; j < letterSelection[i].length; j++){
+                        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = "correctLetterAndPlace"}
+                      }
+                    }
                   }
                 }
               })
@@ -137,8 +159,9 @@ function Game () {
         setSelectedLetter(i);
         let newFilledInValues = filledInValues
         newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
-        setfilledInValues(newFilledInValues);
+        setfilledInValues(newFilledInValues)
         setCurrentGuess(currentGuess + 1)
+        setLetterSelectionArray(letterSelection)
       }
     //TODO: play using the keyboard
     //TODO: style used letters in keyboard
@@ -154,7 +177,8 @@ function Game () {
       filledInValues={filledInValues} />
       <LetterSelection
       onClick={handleLetterClick}
-      // filledInValues={filledInValues}
+      letterArray={letterSelectionArray}
+      filledInValues={filledInValues}
       />
     </div>
   )
