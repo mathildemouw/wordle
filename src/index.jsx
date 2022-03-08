@@ -108,16 +108,23 @@ function Game () {
         setwarnFewLetters(true);
       } else {
           let wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
-          let wordguessArray=[filledInValues[wordIndex - 1][letterIndex].letter,filledInValues[wordIndex - 1][letterIndex+1].letter,filledInValues[wordIndex - 1][letterIndex+2].letter,filledInValues[wordIndex - 1][letterIndex+3].letter,filledInValues[wordIndex - 1][letterIndex+4].letter]
-          let answerArray =[]
+          let wordguessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
+          let theAnswerArray = theAnswer.split("")
           //check if the word is the word
           if(wordguess === theAnswer){
             console.log("you guessed it!")
           } else{
             //check if the word is in the list
             if(wordlist.includes(wordguess)){
-              console.log("word is in the list!")
               //identify letters that are correctLetterAndPlace or correctLetter
+              wordguessArray.map((letterObject, i) => {
+                if(theAnswerArray.includes(letterObject.letter)){
+                  letterObject.answerStatus = "correctLetter"
+                  if(theAnswerArray[i] == letterObject.letter){
+                    letterObject.answerStatus = "correctLetterAndPlace"
+                  }
+                }
+              })
             } else{console.log("word is not in the list!")}
           }
       }
