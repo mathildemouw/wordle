@@ -79,58 +79,68 @@ function Game () {
     let letterSelection = letterSelectionArray
     const middleOfTheLine = ((letterIndex)/5) !== Math.floor((letterIndex)/5)
 
-    //TODO: don't move on to the next word until you test the guess of the current word
     //TODO: allow deleting a letter
-    if(i === "enter"){
-      //check if there are enough letters to form a word
-      if(middleOfTheLine){
-        setwarnFewLetters(true);
-      } else {
-          const wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
-          const wordGuessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
-          const theAnswerArray = theAnswer.split("")
-          //check if the word is the word
-          if(wordguess === theAnswer){
-            console.log("you guessed it!")
-          } else{
-            //check if the word is in the list
-            if(wordlist.includes(wordguess)){
-              setNumOfWordsGuessed(numOfWordsGuessed +1);
-              //identify letters that are correctLetterAndPlace or correctLetter
-              wordGuessArray.map((letterObject, letterObjectIndex) => {
-                if(theAnswerArray.includes(letterObject.letter)){
-                  letterObject.answerStatus = "correctLetter"
-                  if(!correctLetters.includes(letterObject.letter)){
-                    setCorrectLetters(correctLetters.concat(letterObject.letter))
-                    updateLetterSelection(letterObject, letterSelection, "correctLetter")
-                  }
-                  if(theAnswerArray[letterObjectIndex] === letterObject.letter){
-                    letterObject.answerStatus = "correctLetterAndPlace"
-                    if(!correctLettersAndPlace.includes(letterObject.letter)){setCorrectLettersAndPlace(correctLettersAndPlace.concat(letterObject.letter))}
-                    updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
-                  }
-                }else{
-                  //style letters that are guessed but not correctLetter or correctLetterAndPlace
-                }
-              })
-            } else{console.log("word is not in the list!")}
-          }
-      }
-    } else {
-      if((numOfLettersGuessed !== 0) && !(middleOfTheLine)&& !(numOfWordsGuessed === numOfLettersGuessed/5)){
-        console.log("can't move on without pressing enter or deleting")
-      } else {
-        //TODO: can't type more than 5 letters at a time
-        //fill in letter
-        setSelectedLetter(i);
+    switch(i){
+      case "delete":
         let newFilledInValues = filledInValues
-        newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
+        newFilledInValues[wordIndex][letterIndex -1] = {answerStatus:"guessready", letter: ""}
+        setNumOfLettersGuessed(numOfLettersGuessed - 1)
         setfilledInValues(newFilledInValues)
-        setNumOfLettersGuessed(numOfLettersGuessed + 1)
-        setLetterSelectionArray(letterSelection)
-      }
-    //TODO: play using the keyboard
-   }
+        break;
+
+      case "enter":
+            //check if there are enough letters to form a word
+        if(middleOfTheLine){
+          setwarnFewLetters(true);
+        } else {
+            const wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
+            const wordGuessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
+            const theAnswerArray = theAnswer.split("")
+            //check if the word is the word
+            if(wordguess === theAnswer){
+              console.log("you guessed it!")
+            } else{
+              //check if the word is in the list
+              if(wordlist.includes(wordguess)){
+                setNumOfWordsGuessed(numOfWordsGuessed +1);
+
+                //identify letters that are correctLetterAndPlace or correctLetter
+                wordGuessArray.map((letterObject, letterObjectIndex) => {
+                  if(theAnswerArray.includes(letterObject.letter)){
+                    letterObject.answerStatus = "correctLetter"
+                    if(!correctLetters.includes(letterObject.letter)){
+                      setCorrectLetters(correctLetters.concat(letterObject.letter))
+                      updateLetterSelection(letterObject, letterSelection, "correctLetter")
+                    }
+                    if(theAnswerArray[letterObjectIndex] === letterObject.letter){
+                      letterObject.answerStatus = "correctLetterAndPlace"
+                      if(!correctLettersAndPlace.includes(letterObject.letter)){setCorrectLettersAndPlace(correctLettersAndPlace.concat(letterObject.letter))}
+                      updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
+                    }
+                  }else{
+                    //style letters that are guessed but not correctLetter or correctLetterAndPlace
+                  }
+                })
+              } else{console.log("word is not in the list!")}
+            }
+        }
+        break;
+
+      default:
+        if((numOfLettersGuessed !== 0) && !(middleOfTheLine)&& !(numOfWordsGuessed === numOfLettersGuessed/5)){
+            console.log("can't move on without pressing enter or deleting")
+          } else {
+            //TODO: can't type more than 5 letters at a time
+            //fill in letter
+            setSelectedLetter(i);
+            let newFilledInValues = filledInValues
+            newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
+            setfilledInValues(newFilledInValues)
+            setNumOfLettersGuessed(numOfLettersGuessed + 1)
+            setLetterSelectionArray(letterSelection)
+          }
+          //TODO: play using the keyboard
+    }
   }
 
   return (
