@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import wordlist from './wordlist.jsx';
+import LetterSelection from './LetterSelection.jsx';
+import FewLettersWarning from './FewLettersWarning.jsx'
 
 function Square (props) {
     return (
@@ -25,36 +27,6 @@ function AnswerBoard (props) {
     }) }
     </div>
   )
-}
-
-function LetterOption (props) {
-  return(
-    <button 
-    onClick={() => props.onClick(props.letter)} 
-    className={"letter-option " + props.guessedStatus}>{props.letter}</button>
-  )
-}
-
-function FewLettersWarning (props) {
-  if (!props.warnFewLetters) {
-    return null;
-  }
-
-  return(<p className={"few-letters"}>Not enough letters</p>)
-}
-
-function LetterSelection (props) {
-    return(<div className="letter-selection-container">
-      <div className="letter-selection-row">
-        {props.letterArray[0].map((v, i) => <LetterOption key={i} letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
-      </div>
-      <div className="letter-selection-row">
-        {props.letterArray[1].map((v, i) => <LetterOption key={i+10} letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
-      </div>
-      <div className="letter-selection-row">
-        {props.letterArray[2].map((v, i) => <LetterOption key={i+19}letter={v.letter} onClick={props.onClick} guessedStatus={v.guessedStatus}/>)}
-      </div>
-    </div>)
 }
 
 function Game () {
@@ -123,7 +95,6 @@ function Game () {
             if(wordlist.includes(wordguess)){
               //identify letters that are correctLetterAndPlace or correctLetter
               wordGuessArray.map((letterObject, letterObjectIndex) => {
-                // TODO: style letters that are guessed but not correctLetter or correctLetterAndPlace
                 if(theAnswerArray.includes(letterObject.letter)){
                   letterObject.answerStatus = "correctLetter"
                   if(!correctLetters.includes(letterObject.letter)){
@@ -135,6 +106,8 @@ function Game () {
                     if(!correctLettersCorrectPlace.includes(letterObject.letter)){setCorrectLettersCorrectPlace(correctLettersCorrectPlace.concat(letterObject.letter))}
                     updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
                   }
+                }else{
+                  //style letters that are guessed but not correctLetter or correctLetterAndPlace
                 }
               })
             } else{console.log("word is not in the list!")}

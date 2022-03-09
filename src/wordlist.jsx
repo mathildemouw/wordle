@@ -65,6 +65,7 @@ const wordlist = [
 "stain",
 "sound",
 "saint",
+"shaft",
 "shore",
 "shire",
 "shift",
