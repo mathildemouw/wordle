@@ -83,7 +83,7 @@ function Game () {
     switch(i){
       case "delete":
         let newFilledInValues = filledInValues
-        newFilledInValues[wordIndex][letterIndex -1] = {answerStatus:"guessready", letter: ""}
+        newFilledInValues[numOfWordsGuessed][numOfLettersGuessed -1] = {answerStatus:"guessready", letter: ""}
         setNumOfLettersGuessed(numOfLettersGuessed - 1)
         setfilledInValues(newFilledInValues)
         break;
