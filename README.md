@@ -2,6 +2,9 @@
 
 This project is a clone of the popular daily word game, [Wordle](https://www.powerlanguage.co.uk/wordle/). It was bootstrapped using [Create React App](https://github.com/facebook/create-react-app).
 
+<img width="685" alt="Screen Shot 2022-03-09 at 10 40 22 AM" src="https://user-images.githubusercontent.com/5192370/157509342-1aacc7d5-e657-4be5-a24e-7d7e3463d5f2.png">
+
+
 ## Available Scripts
 
 In the project directory, you can run:
