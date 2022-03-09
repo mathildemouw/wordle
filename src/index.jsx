@@ -39,18 +39,19 @@ function Game () {
     initialWords.push(letters)
   }
 
-  const [filledInValues, setfilledInValues] = useState(initialWords);
-  const [selectedLetter, setSelectedLetter] = useState ("");
-  const [lettersGuessed, setLettersGuessed]     = useState(0);
-  const [warnFewLetters, setwarnFewLetters] = useState(false);
+  const [filledInValues, setfilledInValues]               = useState(initialWords)
+  const [selectedLetter, setSelectedLetter]               = useState ("")
+  const [numOfLettersGuessed, setNumOfLettersGuessed]     = useState(0)
+  const [numOfWordsGuessed, setNumOfWordsGuessed]         = useState(0)
+  const [warnFewLetters, setwarnFewLetters]               = useState(false);
   const theAnswer = "donut";
 
-  const [letterSelectionArray, setLetterSelectionArray] = useState([
+  const [letterSelectionArray, setLetterSelectionArray]   = useState([
     [{letter: "q", guessedStatus: ""},{letter: "w", guessedStatus: ""},{letter: "e", guessedStatus: ""},{letter: "r", guessedStatus: ""},{letter: "t", guessedStatus: ""},{letter: "y", guessedStatus: ""},{letter: "u", guessedStatus: ""},{letter: "i", guessedStatus: ""},{letter: "o", guessedStatus: ""},{letter: "p", guessedStatus: ""}],
     [{letter: "a", guessedStatus: ""},{letter: "s", guessedStatus: ""},{letter: "d", guessedStatus: ""},{letter: "f", guessedStatus: ""},{letter: "g", guessedStatus: ""},{letter: "h", guessedStatus: ""},{letter: "j", guessedStatus: ""},{letter: "k", guessedStatus: ""},{letter: "l", guessedStatus: ""}],
     [{letter: "enter", guessedStatus: ""},{letter: "z", guessedStatus: ""},{letter: "x", guessedStatus: ""},{letter: "c", guessedStatus: ""},{letter: "v", guessedStatus: ""},{letter: "b", guessedStatus: ""},{letter: "n", guessedStatus: ""},{letter: "m", guessedStatus: ""}, {letter: "delete", guessedStatus: ""}]])
-  const [correctLetters, setCorrectLetters] = useState([])
-  const [correctLettersCorrectPlace, setCorrectLettersCorrectPlace] = useState([])
+  const [correctLetters, setCorrectLetters]               = useState([])
+  const [correctLettersAndPlace, setCorrectLettersAndPlace] = useState([])
 
 
   useEffect(() => {
@@ -73,15 +74,16 @@ function Game () {
   }
 
   function handleLetterClick(i){
-    const wordIndex = Math.floor(lettersGuessed / 5)
-    const letterIndex = (lettersGuessed - (Math.floor(lettersGuessed / 5) * 5))
+    const wordIndex = Math.floor(numOfLettersGuessed / 5)
+    const letterIndex = (numOfLettersGuessed - (Math.floor(numOfLettersGuessed / 5) * 5))
     let letterSelection = letterSelectionArray
+    const middleOfTheLine = ((letterIndex)/5) !== Math.floor((letterIndex)/5)
 
     //TODO: don't move on to the next word until you test the guess of the current word
     //TODO: allow deleting a letter
     if(i === "enter"){
       //check if there are enough letters to form a word
-      if(((letterIndex)/5) !== Math.floor((letterIndex)/5)){
+      if(middleOfTheLine){
         setwarnFewLetters(true);
       } else {
           const wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
@@ -93,6 +95,7 @@ function Game () {
           } else{
             //check if the word is in the list
             if(wordlist.includes(wordguess)){
+              setNumOfWordsGuessed(numOfWordsGuessed +1);
               //identify letters that are correctLetterAndPlace or correctLetter
               wordGuessArray.map((letterObject, letterObjectIndex) => {
                 if(theAnswerArray.includes(letterObject.letter)){
@@ -103,7 +106,7 @@ function Game () {
                   }
                   if(theAnswerArray[letterObjectIndex] === letterObject.letter){
                     letterObject.answerStatus = "correctLetterAndPlace"
-                    if(!correctLettersCorrectPlace.includes(letterObject.letter)){setCorrectLettersCorrectPlace(correctLettersCorrectPlace.concat(letterObject.letter))}
+                    if(!correctLettersAndPlace.includes(letterObject.letter)){setCorrectLettersAndPlace(correctLettersAndPlace.concat(letterObject.letter))}
                     updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
                   }
                 }else{
@@ -113,8 +116,8 @@ function Game () {
             } else{console.log("word is not in the list!")}
           }
       }
-    } else{
-      if((lettersGuessed !== 0) && !(lettersGuessed/5) === Math.floor((lettersGuessed/5))){
+    } else {
+      if((numOfLettersGuessed !== 0) && !(middleOfTheLine)&& !(numOfWordsGuessed === numOfLettersGuessed/5)){
         console.log("can't move on without pressing enter or deleting")
       } else {
         //TODO: can't type more than 5 letters at a time
@@ -123,7 +126,7 @@ function Game () {
         let newFilledInValues = filledInValues
         newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
         setfilledInValues(newFilledInValues)
-        setLettersGuessed(lettersGuessed + 1)
+        setNumOfLettersGuessed(numOfLettersGuessed + 1)
         setLetterSelectionArray(letterSelection)
       }
     //TODO: play using the keyboard
@@ -135,7 +138,7 @@ function Game () {
       <FewLettersWarning warnFewLetters={warnFewLetters} />
       <AnswerBoard
       selectedLetter={selectedLetter}
-      lettersGuessed={lettersGuessed}
+      numOfLettersGuessed={numOfLettersGuessed}
       filledInValues={filledInValues} />
       <LetterSelection
       onClick={handleLetterClick}
