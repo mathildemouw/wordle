@@ -69,8 +69,7 @@ function Game () {
 
   const [filledInValues, setfilledInValues] = useState(initialWords);
   const [selectedLetter, setSelectedLetter] = useState ("");
-  const [currentGuess, setCurrentGuess]     = useState(0);
-  // const guessesUsed = 0;
+  const [lettersGuessed, setLettersGuessed]     = useState(0);
   const [warnFewLetters, setwarnFewLetters] = useState(false);
   const theAnswer = "donut";
 
@@ -96,14 +95,14 @@ function Game () {
   function updateLetterSelection(letterObject, letterSelection, status) {
     for(let i=0; i < letterSelection.length; i++){
       for(let j=0; j < letterSelection[i].length; j++){
-        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = status}
+        if(letterSelection[i][j].letter === letterObject.letter){letterSelection[i][j].guessedStatus = status}
       }
     }
   }
 
   function handleLetterClick(i){
-    const wordIndex = Math.floor(currentGuess / 5)
-    const letterIndex = (currentGuess - (Math.floor(currentGuess / 5) * 5))
+    const wordIndex = Math.floor(lettersGuessed / 5)
+    const letterIndex = (lettersGuessed - (Math.floor(lettersGuessed / 5) * 5))
     let letterSelection = letterSelectionArray
 
     //TODO: don't move on to the next word until you test the guess of the current word
@@ -124,13 +123,14 @@ function Game () {
             if(wordlist.includes(wordguess)){
               //identify letters that are correctLetterAndPlace or correctLetter
               wordGuessArray.map((letterObject, letterObjectIndex) => {
+                // TODO: style letters that are guessed but not correctLetter or correctLetterAndPlace
                 if(theAnswerArray.includes(letterObject.letter)){
                   letterObject.answerStatus = "correctLetter"
                   if(!correctLetters.includes(letterObject.letter)){
                     setCorrectLetters(correctLetters.concat(letterObject.letter))
                     updateLetterSelection(letterObject, letterSelection, "correctLetter")
                   }
-                  if(theAnswerArray[letterObjectIndex] == letterObject.letter){
+                  if(theAnswerArray[letterObjectIndex] === letterObject.letter){
                     letterObject.answerStatus = "correctLetterAndPlace"
                     if(!correctLettersCorrectPlace.includes(letterObject.letter)){setCorrectLettersCorrectPlace(correctLettersCorrectPlace.concat(letterObject.letter))}
                     updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
@@ -141,7 +141,7 @@ function Game () {
           }
       }
     } else{
-      if((currentGuess !== 0) && (currentGuess/5) === Math.floor((currentGuess/5))){
+      if((lettersGuessed !== 0) && !(lettersGuessed/5) === Math.floor((lettersGuessed/5))){
         console.log("can't move on without pressing enter or deleting")
       } else {
         //TODO: can't type more than 5 letters at a time
@@ -150,11 +150,10 @@ function Game () {
         let newFilledInValues = filledInValues
         newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
         setfilledInValues(newFilledInValues)
-        setCurrentGuess(currentGuess + 1)
+        setLettersGuessed(lettersGuessed + 1)
         setLetterSelectionArray(letterSelection)
       }
     //TODO: play using the keyboard
-    //TODO: style used letters in keyboard
    }
   }
 
@@ -163,7 +162,7 @@ function Game () {
       <FewLettersWarning warnFewLetters={warnFewLetters} />
       <AnswerBoard
       selectedLetter={selectedLetter}
-      currentGuess={currentGuess}
+      lettersGuessed={lettersGuessed}
       filledInValues={filledInValues} />
       <LetterSelection
       onClick={handleLetterClick}
