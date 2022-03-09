@@ -74,10 +74,6 @@ function Game () {
   const [warnFewLetters, setwarnFewLetters] = useState(false);
   const theAnswer = "donut";
 
-  const letterArray = [["q","w","e","r","t","y","u","i","o","p"],
-      ["a","s","d","f","g","h","j","k","l"],
-      ["enter","z","x","c","v","b","n","m", "delete"]]
-
   const [letterSelectionArray, setLetterSelectionArray] = useState([
     [{letter: "q", guessedStatus: ""},{letter: "w", guessedStatus: ""},{letter: "e", guessedStatus: ""},{letter: "r", guessedStatus: ""},{letter: "t", guessedStatus: ""},{letter: "y", guessedStatus: ""},{letter: "u", guessedStatus: ""},{letter: "i", guessedStatus: ""},{letter: "o", guessedStatus: ""},{letter: "p", guessedStatus: ""}],
     [{letter: "a", guessedStatus: ""},{letter: "s", guessedStatus: ""},{letter: "d", guessedStatus: ""},{letter: "f", guessedStatus: ""},{letter: "g", guessedStatus: ""},{letter: "h", guessedStatus: ""},{letter: "j", guessedStatus: ""},{letter: "k", guessedStatus: ""},{letter: "l", guessedStatus: ""}],
@@ -97,6 +93,13 @@ function Game () {
     }
   }, [warnFewLetters]);
 
+  function updateLetterSelection(letterObject, letterSelection, status) {
+    for(let i=0; i < letterSelection.length; i++){
+      for(let j=0; j < letterSelection[i].length; j++){
+        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = status}
+      }
+    }
+  }
 
   function handleLetterClick(i){
     const wordIndex = Math.floor(currentGuess / 5)
@@ -125,25 +128,12 @@ function Game () {
                   letterObject.answerStatus = "correctLetter"
                   if(!correctLetters.includes(letterObject.letter)){
                     setCorrectLetters(correctLetters.concat(letterObject.letter))
-                    console.log("about to change letter selection")
-
-                    //TODO: pull out into its own function
-                    for(let i=0; i < letterSelection.length; i++){
-                      for(let j=0; j < letterSelection[i].length; j++){
-                        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = "correctLetter"}
-                      }
-                    }
+                    updateLetterSelection(letterObject, letterSelection, "correctLetter")
                   }
                   if(theAnswerArray[letterObjectIndex] == letterObject.letter){
                     letterObject.answerStatus = "correctLetterAndPlace"
                     if(!correctLettersCorrectPlace.includes(letterObject.letter)){setCorrectLettersCorrectPlace(correctLettersCorrectPlace.concat(letterObject.letter))}
-
-                    //TODO: pull out into its own function
-                    for(let i=0; i < letterSelection.length; i++){
-                      for(let j=0; j < letterSelection[i].length; j++){
-                        if(letterSelection[i][j].letter == letterObject.letter){letterSelection[i][j].guessedStatus = "correctLetterAndPlace"}
-                      }
-                    }
+                    updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
                   }
                 }
               })
