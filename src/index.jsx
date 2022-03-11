@@ -19,8 +19,8 @@ function AnswerBoard (props) {
     { props.filledInValues.map((word, wordIndex) => {
         return <div className="square-row" key={wordIndex}>
         {
-          word.map((letter, letterIndex) => {
-            return <Square answerStatus={letter.answerStatus} letter={letter.letter} key={`${wordIndex}-${letterIndex}`} />
+          word.map((letter, endOfWordCounter) => {
+            return <Square answerStatus={letter.answerStatus} letter={letter.letter} key={`${wordIndex}-${endOfWordCounter}`} />
           })
         }
       </div>
@@ -75,15 +75,16 @@ function Game () {
 
   function handleLetterClick(i){
     const wordIndex = Math.floor(numOfLettersGuessed / 5)
-    const letterIndex = (numOfLettersGuessed - (Math.floor(numOfLettersGuessed / 5) * 5))
+    const endOfWordCounter = numOfLettersGuessed % 5
+    const newendOfWordCounter = (numOfLettersGuessed - 1) % 5
     let letterSelection = letterSelectionArray
-    const middleOfTheLine = ((letterIndex)/5) !== Math.floor((letterIndex)/5)
+    const middleOfTheLine = ((endOfWordCounter)/5) !== Math.floor((endOfWordCounter)/5)
 
     //TODO: allow deleting a letter
     switch(i){
       case "delete":
         let newFilledInValues = filledInValues
-        newFilledInValues[numOfWordsGuessed][letterIndex -1] = {answerStatus:"guessready", letter: ""}
+        newFilledInValues[numOfWordsGuessed][newendOfWordCounter] = {answerStatus:"guessready", letter: ""}
         setNumOfLettersGuessed(numOfLettersGuessed - 1)
         setfilledInValues(newFilledInValues)
         break;
@@ -93,8 +94,8 @@ function Game () {
         if(middleOfTheLine){
           setwarnFewLetters(true);
         } else {
-            const wordguess = `${filledInValues[wordIndex - 1][letterIndex].letter}${filledInValues[wordIndex - 1][letterIndex+1].letter}${filledInValues[wordIndex - 1][letterIndex+2].letter}${filledInValues[wordIndex - 1][letterIndex+3].letter}${filledInValues[wordIndex - 1][letterIndex+4].letter}`
-            const wordGuessArray=[filledInValues[wordIndex - 1][letterIndex],filledInValues[wordIndex - 1][letterIndex+1],filledInValues[wordIndex - 1][letterIndex+2],filledInValues[wordIndex - 1][letterIndex+3],filledInValues[wordIndex - 1][letterIndex+4]]
+            const wordguess = `${filledInValues[wordIndex - 1][endOfWordCounter].letter}${filledInValues[wordIndex - 1][endOfWordCounter+1].letter}${filledInValues[wordIndex - 1][endOfWordCounter+2].letter}${filledInValues[wordIndex - 1][endOfWordCounter+3].letter}${filledInValues[wordIndex - 1][endOfWordCounter+4].letter}`
+            const wordGuessArray=[filledInValues[wordIndex - 1][endOfWordCounter],filledInValues[wordIndex - 1][endOfWordCounter+1],filledInValues[wordIndex - 1][endOfWordCounter+2],filledInValues[wordIndex - 1][endOfWordCounter+3],filledInValues[wordIndex - 1][endOfWordCounter+4]]
             const theAnswerArray = theAnswer.split("")
             //check if the word is the word
             if(wordguess === theAnswer){
@@ -134,7 +135,7 @@ function Game () {
             //fill in letter
             setSelectedLetter(i);
             let newFilledInValues = filledInValues
-            newFilledInValues[wordIndex][letterIndex] = {answerStatus:"guessed", letter: i}
+            newFilledInValues[wordIndex][endOfWordCounter] = {answerStatus:"guessed", letter: i}
             setfilledInValues(newFilledInValues)
             setNumOfLettersGuessed(numOfLettersGuessed + 1)
             setLetterSelectionArray(letterSelection)
