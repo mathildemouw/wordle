@@ -50,6 +50,11 @@ body {
   border: none;
 }
 
+.usedLetter {
+  background: rgb(58, 58, 60);
+  border: none;
+}
+
 .few-letters {
   background: lightgrey;
   border-radius: 5px;

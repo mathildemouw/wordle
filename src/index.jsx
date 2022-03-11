@@ -52,6 +52,7 @@ function Game () {
     [{letter: "enter", guessedStatus: ""},{letter: "z", guessedStatus: ""},{letter: "x", guessedStatus: ""},{letter: "c", guessedStatus: ""},{letter: "v", guessedStatus: ""},{letter: "b", guessedStatus: ""},{letter: "n", guessedStatus: ""},{letter: "m", guessedStatus: ""}, {letter: "delete", guessedStatus: ""}]])
   const [correctLetters, setCorrectLetters]               = useState([])
   const [correctLettersAndPlace, setCorrectLettersAndPlace] = useState([])
+  const [usedLetters, setUsedLetters] = useState([])
 
 
   useEffect(() => {
@@ -115,11 +116,16 @@ function Game () {
                     }
                     if(theAnswerArray[letterObjectIndex] === letterObject.letter){
                       letterObject.answerStatus = "correctLetterAndPlace"
-                      if(!correctLettersAndPlace.includes(letterObject.letter)){setCorrectLettersAndPlace(correctLettersAndPlace.concat(letterObject.letter))}
+                      if(!correctLettersAndPlace.includes(letterObject.letter)){
+                        setCorrectLettersAndPlace(correctLettersAndPlace.concat(letterObject.letter))
+                      }
                       updateLetterSelection(letterObject, letterSelection, "correctLetterAndPlace")
                     }
                   }else{
-                    //style letters that are guessed but not correctLetter or correctLetterAndPlace
+                    letterObject.answerStatus = "usedLetter"
+                    setUsedLetters(usedLetters.concat(letterObject.letter))
+                    updateLetterSelection(letterObject, letterSelection, "usedLetter")
+                    // //style letters that are guessed but not correctLetter or correctLetterAndPlace
                   }
                 })
               } else{console.log("word is not in the list!")}
