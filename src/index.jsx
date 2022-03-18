@@ -91,8 +91,9 @@ function Game () {
         break;
 
       case "enter":
-            //check if there are enough letters to form a word
+        //check if there are enough letters to form a word
         if(middleOfTheLine){
+          //TODO: animate word row shaking
           setwarnFewLetters(true);
         } else {
             const wordguess = `${filledInValues[wordIndex - 1][endOfWordCounter].letter}${filledInValues[wordIndex - 1][endOfWordCounter+1].letter}${filledInValues[wordIndex - 1][endOfWordCounter+2].letter}${filledInValues[wordIndex - 1][endOfWordCounter+3].letter}${filledInValues[wordIndex - 1][endOfWordCounter+4].letter}`
@@ -102,11 +103,10 @@ function Game () {
             if(wordguess === theAnswer){
               console.log("you guessed it!")
             } else{
-              //check if the word is in the list
               if(wordlist.includes(wordguess)){
                 setNumOfWordsGuessed(numOfWordsGuessed +1);
 
-                //identify letters that are correctLetterAndPlace or correctLetter
+                //style used letters
                 wordGuessArray.map((letterObject, letterObjectIndex) => {
                   if(theAnswerArray.includes(letterObject.letter)){
                     letterObject.answerStatus = "correctLetter"
@@ -125,7 +125,6 @@ function Game () {
                     letterObject.answerStatus = "usedLetter"
                     setUsedLetters(usedLetters.concat(letterObject.letter))
                     updateLetterSelection(letterObject, letterSelection, "usedLetter")
-                    // //style letters that are guessed but not correctLetter or correctLetterAndPlace
                   }
                 })
               } else{console.log("word is not in the list!")}
@@ -137,7 +136,6 @@ function Game () {
         if((numOfLettersGuessed !== 0) && !(middleOfTheLine)&& !(numOfWordsGuessed === numOfLettersGuessed/5)){
             console.log("can't move on without pressing enter or deleting")
           } else {
-            //TODO: can't type more than 5 letters at a time
             //fill in letter
             setSelectedLetter(i);
             let newFilledInValues = filledInValues

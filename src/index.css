@@ -56,9 +56,12 @@ body {
 }
 
 .few-letters {
-  background: lightgrey;
-  border-radius: 5px;
+  background: white;
+  border-radius: 4px;
   color: black;
   height: 40px;
   position: absolute;
+  font-size: 28px;
+  padding: 20px;
+  font-style: sans-serif;
 }

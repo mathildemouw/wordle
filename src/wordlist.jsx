@@ -23,6 +23,7 @@ const wordlist = [
 "empty",
 "faith",
 "first",
+"flirt",
 "flout",
 "front",
 "grand",
