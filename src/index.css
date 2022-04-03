@@ -65,3 +65,7 @@ body {
   padding: 20px;
   font-style: sans-serif;
 }
+
+.suggestions-container {
+  color: white;
+}

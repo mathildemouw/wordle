@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+
 import './index.css';
 import wordlist from './wordlist.jsx';
 import LetterSelection from './LetterSelection.jsx';
@@ -11,6 +12,60 @@ function Square (props) {
       className={"square " + props.answerStatus}>{props.letter}
       </button>
     )
+}
+
+function CheatForm (props){
+  const [cheatGuess, setCheatGuess] = useState("")
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault()
+    alert(`Cheating! ${cheatGuess}`)
+  }
+
+  function autocompleteForm (value){
+    setCheatGuess(value)
+    let suggestedCheatWords = []
+    for(let i=0; i<wordlist.length; i++){
+      if(wordlist[i].includes(value)){
+        suggestedCheatWords.push(wordlist[i])
+        console.log(wordlist[i], value)
+        props.onChange(suggestedCheatWords)
+      }
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Cheat Guess:
+        <input
+        type="text"
+        value={cheatGuess}
+        onChange={e => autocompleteForm(e.target.value)}
+        />
+      </label>
+      <input type="submit" value="Cheat!" />
+    </form>
+  )
+}
+
+function CheatList (props){
+  console.log(props.cheatWords)
+  return (
+    <div>
+      <ul>
+        {props.cheatWords.map((v,i) => <AutofilledWord key={i} word={v}/>)}
+      </ul>
+    </div>
+  )
+}
+
+function AutofilledWord (props) {
+  return(
+    <div className="suggestions-container">
+      {props.word}
+    </div>
+  )
 }
 
 function AnswerBoard (props) {
@@ -53,7 +108,7 @@ function Game () {
   const [correctLetters, setCorrectLetters]               = useState([])
   const [correctLettersAndPlace, setCorrectLettersAndPlace] = useState([])
   const [usedLetters, setUsedLetters] = useState([])
-
+  const [cheatWords, setCheatWords] = useState([])
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -74,7 +129,12 @@ function Game () {
     }
   }
 
+  function handleCheatGuessing(e) {
+    setCheatWords(e)
+  }
+
   function handleLetterClick(i){
+    //TODO: handle not guessing in six tries
     const wordIndex = Math.floor(numOfLettersGuessed / 5)
     const endOfWordCounter = numOfLettersGuessed % 5
     const newendOfWordCounter = (numOfLettersGuessed - 1) % 5
@@ -160,6 +220,10 @@ function Game () {
       letterArray={letterSelectionArray}
       filledInValues={filledInValues}
       />
+      <div>
+        <CheatForm onChange={handleCheatGuessing} cheatWords={cheatWords}/>
+        <CheatList cheatWords={cheatWords}/>
+      </div>
     </div>
   )
 }
