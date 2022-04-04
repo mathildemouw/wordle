@@ -1,4 +1,7 @@
 const wordlist = [
+"abhor",
+"actor",
+"adage",
 "after",
 "ahead",
 "altar",
@@ -87,6 +90,7 @@ const wordlist = [
 "spent",
 "spoil",
 "spork",
+"sport",
 "stove",
 "store",
 "stone",

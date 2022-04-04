@@ -35,7 +35,7 @@ function CheatForm (props){
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="cheat-form" onSubmit={handleSubmit}>
       <label>
         Cheat Guess:
         <input
@@ -52,9 +52,9 @@ function CheatForm (props){
 function CheatList (props){
   console.log(props.cheatWords)
   return (
-    <div>
+    <div className="cheatlist-container">
       <ul>
-        {props.cheatWords.map((v,i) => <AutofilledWord key={i} word={v}/>)}
+        {props.cheatWords.map((v,i) => <li><AutofilledWord key={i} word={v}/></li>)}
       </ul>
     </div>
   )
